@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const useHardwareStore = defineStore('hardware', {
-  state: () => ({
-    hardware: [],
-    loading: false
-  }),
-  actions: {
-    async loadHardware() {
-      this.loading = true
-      const data = await import('../assets/hardware.json')
-      this.hardware = data.default
-      this.loading = false
-    }
+export const useHardwareStore = defineStore('hardware', () => {
+  const hardware = ref([])
+  const loading = ref(false)
+
+  async function loadHardware() {
+    loading.value = true
+    const data = await import('../assets/hardware.json')
+    hardware.value = data.default
+    loading.value = false
+  }
+
+  return {
+    hardware,
+    loading,
+    loadHardware
   }
 })

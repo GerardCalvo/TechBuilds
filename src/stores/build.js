@@ -1,31 +1,38 @@
 import { defineStore } from 'pinia'
+import { computed } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import groupBy from 'lodash/groupBy'
 
-export const useBuildStore = defineStore('build', {
-  state: () => ({
-    components: useLocalStorage('techbuilds-build', [])
-  }),
+export const useBuildStore = defineStore('build', () => {
+  const components = useLocalStorage('techbuilds-build', [])
 
-  getters: {
-    totalPrice(state) {
-      return state.components.reduce((sum, c) => sum + c.price, 0)
-    },
-    groupedByType(state) {
-      return groupBy(state.components, 'type')
-    }
-  },
+  const totalPrice = computed(() =>
+    components.value.reduce((sum, c) => sum + c.price, 0)
+  )
 
-  actions: {
-    addComponent(component) {
-      this.components.push(component)
-    },
-    removeComponent(index) {
-      this.components.splice(index, 1)
-    },
-    checkout() {
-      alert('Compra realitzada!')
-      this.components = []
-    }
+  const groupedByType = computed(() =>
+    groupBy(components.value, 'type')
+  )
+
+  function addComponent(component) {
+    components.value.push(component)
+  }
+
+  function removeComponent(index) {
+    components.value.splice(index, 1)
+  }
+
+  function checkout() {
+    alert('Compra realitzada!')
+    components.value = []
+  }
+
+  return {
+    components,
+    totalPrice,
+    groupedByType,
+    addComponent,
+    removeComponent,
+    checkout
   }
 })
