@@ -18,7 +18,7 @@ const buildStore = useBuildStore()
       </ul>
     </div>
 
-    <button @click="buildStore.checkout()">Checkout</button>
+    <button @click="buildStore.checkout()">Pagar</button>
   </aside>
 </template>
 
